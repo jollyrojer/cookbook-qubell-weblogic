@@ -38,3 +38,10 @@ default[:weblogic][:silent_conf]["WLS_INSTALL_DIR"] = "#{node[:weblogic][:weblog
 default[:weblogic][:silent_conf]["COMPONENT_PATHS"] = "WebLogic Server/Core Application Server|WebLogic Server/Administration Console|WebLogic Server/Configuration Wizard and Upgrade Framework|WebLogic Server/Web 2.0 HTTP Pub-Sub Server|WebLogic Server/WebLogic JDBC Drivers|WebLogic Server/Third Party JDBC Drivers|WebLogic Server/WebLogic Server Clients|WebLogic Server/WebLogic Web Server Plugins|WebLogic Server/UDDI and Xquery Support|WebLogic Server/Server Examples|Oracle Coherence/Coherence Product Files"
 default[:weblogic][:silent_conf]["INSTALL_SHORTCUT_IN_ALL_USERS_FOLDER"] = "yes"
 default[:weblogic][:silent_conf]["LOCAL_JVMS"] = "#{node[:weblogic][:java_home]}|#{node[:weblogic][:bea_home]}/jrockit"
+
+#WLST
+default[:weblogic][:machine][:name] = "Machine-0"
+if node[:weblogic][:machine][:address].nil?
+  default[:weblogic][:machine][:address] = node[:ipaddress]
+end
+default[:weblogic][:cluster][:name] = 'None'

@@ -15,7 +15,7 @@ def nmOpenConnection(retries=0):
     if connection_timeout < connection_delay * retries:
     	raise EnvironmentError("Cant't connect to NodeManager")
     try:
-        nmConnect(adminusername, adminpassword, 'localhost', '5556', '<%= node[:weblogic][:domain_name] %>', domainlocation, 'ssl')
+        nmConnect(adminusername, adminpassword, '<%= node[:weblogic][:machine][:address] %>', '5556', '<%= node[:weblogic][:domain_name] %>', domainlocation, 'ssl')
     except:
         retries+=1
         print "Retrying..."

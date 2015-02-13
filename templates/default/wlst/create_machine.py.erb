@@ -1,0 +1,13 @@
+print 'CREATING <%= @ctx[:machine_name] %> MACHINE';
+connect('<%= node[:weblogic][:user] %>','<%= node[:weblogic][:password] %>','t3://<%= node[:weblogic][:domain_name] %>:<%= node[:weblogic][:port] %>')
+
+edit()
+startEdit()
+create('<%= @ctx[:machine_name] %>','Machine')
+cd('/Machines/<%= @ctx[:machine_name] %>/NodeManager/<%= @ctx[:machine_name] %>')
+set('ListenAddress', '<%= @ctx[:machine_ip] %>')
+set('ListenPort', int(<%= @ctx[:machine_port] %>))
+activate()
+disconnect()
+print '<%= @ctx[:machine_name] %> MACHINE CREATED SUCCESSFULLY';
+exit()

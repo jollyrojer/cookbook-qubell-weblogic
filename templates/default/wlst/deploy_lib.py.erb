@@ -1,0 +1,5 @@
+print 'DEPLOY <%= node[:weblogic][:lib][:name] %> LIBRARY';
+
+deploy('<%= node[:weblogic][:lib][:name] %>','<%= node[:weblogic][:lib][:path] %>',targets='<%= node[:weblogic][:lib][:target].join(',') %>',libraryModule='<%= node[:weblogic][:lib][:is_module] %>')
+
+exit()
