@@ -1,14 +1,15 @@
-print 'CREATING <%= node[:weblogic][:coh_cluster][:name] %> COHERENCE CLUSTER';
+print 'CREATING <%= @ctx[:coh_cluster_name] %> COHERENCE CLUSTER';
 
+connect('<%= node[:weblogic][:user] %>','<%= node[:weblogic][:password] %>','t3://<%= node[:weblogic][:domain_name] %>:<%= node[:weblogic][:port] %>')
 edit()
 startEdit()
-cmo.createCoherenceClusterSystemResource('<%= node[:weblogic][:coh_cluster][:name] %>')
-cd('/CoherenceClusterSystemResources/<%= node[:weblogic][:coh_cluster][:name] %>')
-set('Targets',jarray.array([ObjectName('com.bea:Name=<%= node[:weblogic][:server][:name] %>.join(','),Type=Server')],ObjectName))
-cd('Resource/<%= node[:weblogic][:coh_cluster][:name] %>/CoherenceClusterParams/<%= node[:weblogic][:coh_cluster][:name] %>')
-cmo.setUnicastPortAutoAdjust(<%= node[:weblogic][:coh_cluster][:unicast_port_autoadjust] %>)
-cmo.setUnicastListenAddress('<%= node[:weblogic][:coh_cluster][:unicast_address] %>')
-cmo.setUnicastListenPort(<%= nodenode[:weblogic][:coh_cluster][:unicast_port] %>)
+cmo.createCoherenceClusterSystemResource('<%= @ctx[:coh_cluster_name] %>')
+cd('/CoherenceClusterSystemResources/<%= @ctx[:coh_cluster_name] %>')
+set('Targets',jarray.array([ObjectName('com.bea:Name=<%= @ctx[:server_name] %>.join(','),Type=Server')],ObjectName))
+cd('Resource/<%= @ctx[:coh_cluster_name] %>/CoherenceClusterParams/<%= @ctx[:coh_cluster_name] %>')
+cmo.setUnicastPortAutoAdjust(<%= @ctx[:coh_cluster_unicast_port_autoadjust] %>)
+cmo.setUnicastListenAddress('<%= @ctx[:coh_cluster_unicast_address] %>')
+cmo.setUnicastListenPort(<%= @ctx[:coh_cluster_unicast_port] %>)
 activate()
 disconnect()
 exit()

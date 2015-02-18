@@ -1,6 +1,7 @@
 #
 # Setup coherence server
 #
+require 'resolv'
 Array(node[:weblogic][:machine][:address]).each do |machine|
   name, port = machine.split(':')
   ip = Resolv.getaddress(name)
