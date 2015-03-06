@@ -1,5 +1,6 @@
 print 'DEPLOY <%= node[:weblogic][:lib][:name] %> LIBRARY';
 
-deploy('<%= node[:weblogic][:lib][:name] %>','<%= node[:weblogic][:lib][:path] %>',targets='<%= node[:weblogic][:lib][:target].join(',') %>',libraryModule='<%= node[:weblogic][:lib][:is_module] %>')
+connect('<%= node[:weblogic][:user] %>','<%= node[:weblogic][:password] %>','t3://<%= node[:weblogic][:domain_name] %>:<%= node[:weblogic][:port] %>')
+deploy('<%= @ctx[:lib_name] %>','<%= @ctx[:lib_source] %>',targets='<%= @ctx[:wl_target] %>',libraryModule='<%= @ctx[:is_module] %>')
 
 exit()

@@ -1,11 +1,18 @@
 #
 # Setup coherence cluster
 #
-weblogic_manage_coh_cluster [:weblogic][:coh_cluster][:name] do
+require 'resolv'
+weblogic_manage_coh_cluster node[:weblogic][:coh_cluster][:name] do
 
-  Array(node[:weblogic][:server][:name]).each do | servername|
-    server_name = server.split(':')
+  servers = Array(node[:weblogic][:server][:name]).map { |x| x.split(':')[0] }
+  coh_servers = []
+  Array(node[:weblogic][:coh_server][:name]).each do |coh|
+    name, port = coh.split(":", 2)
+    ip = Resolv.getaddress(name)
+    h = { :coh_ip => ip, :coh_port => port, :coh_name => name }
+    coh_servers << h
   end
+
   case node[:platform_family]
     when "windows"
       owner node[:curent_user]
@@ -17,8 +24,7 @@ weblogic_manage_coh_cluster [:weblogic][:coh_cluster][:name] do
   settings({
     :coh_cluster_name => node[:weblogic][:coh_cluster][:name],
     :coh_cluster_unicast_port_autoadjust => node[:weblogic][:coh_cluster][:unicast_port_autoadjust],
-    :coh_cluster_unicast_address => node[:weblogic][:coh_cluster][:unicast_address],
-    :coh_cluster_unicast_port => node[:weblogic][:coh_cluster][:unicast_port],
-    :server_name => server_name 
+    :server_name => servers,
+    :wka_list => coh_servers
   })
 end

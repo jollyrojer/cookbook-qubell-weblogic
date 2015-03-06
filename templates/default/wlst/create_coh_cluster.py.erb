@@ -5,11 +5,19 @@ edit()
 startEdit()
 cmo.createCoherenceClusterSystemResource('<%= @ctx[:coh_cluster_name] %>')
 cd('/CoherenceClusterSystemResources/<%= @ctx[:coh_cluster_name] %>')
-set('Targets',jarray.array([ObjectName('com.bea:Name=<%= @ctx[:server_name] %>.join(','),Type=Server')],ObjectName))
+set('Targets',jarray.array([<%= @ctx[:server_name].map {|x| "ObjectName('com.bea:Name=#{x},Type=Server')"}.join(',') %>],ObjectName))
 cd('Resource/<%= @ctx[:coh_cluster_name] %>/CoherenceClusterParams/<%= @ctx[:coh_cluster_name] %>')
 cmo.setUnicastPortAutoAdjust(<%= @ctx[:coh_cluster_unicast_port_autoadjust] %>)
-cmo.setUnicastListenAddress('<%= @ctx[:coh_cluster_unicast_address] %>')
-cmo.setUnicastListenPort(<%= @ctx[:coh_cluster_unicast_port] %>)
+cmo.setUnicastListenAddress('<%= @ctx[:wka_list][0][:coh_ip] %>')
+cmo.setUnicastListenPort(<%= @ctx[:wka_list][0][:coh_port] %>)
+print 'Add known Coherence Cluster addresses';
+cd('/CoherenceClusterSystemResources/<%= @ctx[:coh_cluster_name] %>/CoherenceClusterResource/<%= @ctx[:coh_cluster_name] %>/CoherenceClusterParams/<%= @ctx[:coh_cluster_name] %>/CoherenceClusterWellKnownAddresses/<%= @ctx[:coh_cluster_name] %>');  
+<% @ctx[:wka_list].each do |wka_s| -%>
+cmo.createCoherenceClusterWellKnownAddress('<%= wka_s[:coh_name] %>')
+address = cmo.lookupCoherenceClusterWellKnownAddress('<%= wka_s[:coh_name] %>')
+address.setListenPort(<%= wka_s[:coh_port] %>)
+address.setListenAddress('<%= wka_s[:coh_ip] %>')
+<% end -%>
 activate()
 disconnect()
 exit()
